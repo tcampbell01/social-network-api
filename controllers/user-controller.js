@@ -73,7 +73,7 @@ const userController = {
 
   addToFriendList({params}, res) {
     User.findOneAndUpdate({
-            _id: params.userId
+            _id: params.id
         }, {
             $push: {
                 friends: params.friendId
@@ -97,7 +97,7 @@ const userController = {
 },
 
     //delete friend
-    removefromFriendList({
+    removeFromFriendList({
         params
     }, res) {
         User.findOneAndDelete({
