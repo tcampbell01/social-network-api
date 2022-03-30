@@ -1,9 +1,10 @@
-const { Users } = require("../models");
+const { User} = require("../models");
 
-const usersController = {
+
+const userController = {
   // get all users
   getAllUsers(req, res) {
-    Users.find({})
+    User.find({})
       .populate({
         path: "thoughts",
         select: "-__v",
@@ -13,46 +14,38 @@ const usersController = {
         select: "-__v",
       })
       .select("-__v")
-      // .sort method helps us to return the newest pizza first.  .sort({_id: -1}) sorts in DESC order by the _id value
-      .sort({ _id: -1 })
-      .then((dbUsersData) => res.json(dbUsersData))
+      
+   
+      .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
-        res.sendStatus(400);
-      });
-  },
+        res.status(400).json(err);
+  });
+},
 
   // get one user by id
-  getUsersById({ params }, res) {
-    Users.findOne({ _id: params.id })
-      .populate({
-        path: "thoughts",
-
-        // - minus sign in front of the field indicates that we don't want it to be returned.  If we didn't have it, it would mean that it would return only the __v field
-        select: "-__v",
-      })
-      .populate({
-        path: "friends",
-        select: "-__v",
-      })
+  getUserById({ params }, res) {
+    User.findOne({ _id: params.id })
+      .populate( 'thoughts' )
+      .populate('friends')
       .select("-__v")
-      .then((dbUsersData) => res.json(dbUsersData))
+      .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
         res.sendStatus(400);
       });
   },
 
-  // createPizza
-  createUsers({ body }, res) {
-    Users.create(body)
-      .then((dbUsersData) => res.json(dbUsersData))
+  
+  createUser({ body }, res) {
+    User.create(body)
+      .then((dbUserData) => res.json(dbUserData))
       .catch((err) => res.json(err));
   },
 
-  // update pizza by id
-  updateUsers({ params, body }, res) {
-    Users.findOneAndUpdate({ _id: params.id }, body, {
+ 
+  updateUser({ params, body }, res) {
+    User.findOneAndUpdate({ _id: params.id }, body, {
       new: true,
       runValidators: true,
     })
@@ -66,15 +59,15 @@ const usersController = {
       .catch((err) => res.json(err));
   },
 
-  // delete pizza
-  deleteUsers({ params }, res) {
-    Users.findOneAndDelete({ _id: params.id })
+  
+  deleteUser({ params }, res) {
+    User.findOneAndDelete({ _id: params.id })
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => res.json(err));
   },
 
   addToFriendList({ params }, res) {
-    Users.findOneAndUpdate(
+    User.findOneAndUpdate(
       {
         _id: params.id,
       },
@@ -84,11 +77,11 @@ const usersController = {
         },
       },
       {
-        new: true,
+        runValidators: true
       }
     )
-      .populate({ path: "friends", select: "-__v" })
-      .select("-__v")
+      // .populate({ path: "friends", select: "-__v" })
+      // .select("-__v")
       .then((dbUserData) => {
         if (!dbUserData) {
           res.status(404).json({
@@ -106,15 +99,15 @@ const usersController = {
 
   //delete friend
   removeFromFriendList({ params }, res) {
-    Users.findOneAndDelete(
+    User.findOneAndUpdate(
       { _id: params.id },
       { $pull: { friends: params.friendId } },
-      { new: true }
+      { runValidators: true }
     )
-      .populate({ path: "friends", select: "-__v" })
-      .select("-__v")
-      .then((dbUsersData) => {
-        if (!dbUsersData) {
+      // .populate({ path: "friends", select: "-__v" })
+      // .select("-__v")
+      .then((dbUserData) => {
+        if (!dbUserData) {
           res.status(404).json({
             message: "No friend found with this id.",
           });
@@ -128,4 +121,4 @@ const usersController = {
   },
 };
 
-module.exports = usersController;
+module.exports = userController;

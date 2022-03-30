@@ -3,10 +3,10 @@ const dateFormat = require('../utils/dateFormat');
 
 const UserSchema = new Schema(
   {
-    userName: {
+    username: {
       type: String,
       unique: true,
-      required: 'You need to provide a pizza name!',
+      required: 'You need to provide a username name!',
       trim: true
     },
     email: {
@@ -32,18 +32,20 @@ const UserSchema = new Schema(
   {
     toJSON: {
       virtuals: true,
-      getters: true
+      getters: true,
     },
     // prevents virtuals from creating duplicate of _id as `id`
-    id: false
+    id: false,
   }
 );
 
+
+
+
 // get total count of comments and replies on retrieval
 UserSchema.virtual('friendCount').get(function() {
-  return this.friend.length;
+  return this.friends.length;
 });
 
 const User = model('User', UserSchema);
-
 module.exports = User;
