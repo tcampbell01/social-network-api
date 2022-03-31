@@ -116,9 +116,10 @@ updateThought({ params, body }, res) {
   // remove reply
   removeReaction({ params }, res) {
     Thought.findOneAndUpdate(
+    
       { _id: params.thoughtId },
       { $pull: { reactions: { reactionId: params.reactionId } } },
-      { new: true }
+      { runValidators: true, new: true }
     )
     .then(dbUserData => res.json(dbUserData))
     .catch(err => res.json(err));

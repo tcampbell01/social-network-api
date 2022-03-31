@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 const reactionSchema = require('./Reaction')
 
@@ -6,6 +6,14 @@ const reactionSchema = require('./Reaction')
 
 
 const thoughtSchema = new Schema(
+
+// {
+//     // set custom id to avoid confusion with parent comment _id
+//     thoughtId: {
+//       type: Schema.Types.ObjectId,
+//       default: () => new Types.ObjectId()
+//     }
+//   },
   {
     thoughtText: {
       type: String,
