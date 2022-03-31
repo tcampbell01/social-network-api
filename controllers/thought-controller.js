@@ -1,25 +1,27 @@
-const { Thought } = require('../models/Thought');
+const {Thought, User}  = require('../models');
+
+
 
 const thoughtController = {
  
 getAllThoughts(req,res) {
   Thought.find({})
-  // .populate({path: 'reactions', select: '-__v'})
-  //       .select('-__v')
-  .then(dbThoughtsData=> res.json(dbThoughtsData))
+  .populate({path: 'user', select: '-__v'})
+        .select('-__v')
+  .then(dbThoughtData=> res.json(dbThoughtData))
   .catch(err => {
     console.log(err);
-    res.status(404).json(err);
+    res.status(500).json(err);
   });
 },
 
 getThoughtById({ params }, res) {
   Thought.findOne({ _id: params.thoughtId })
-  // .populate({path: 'reactions',select: '-__v'})
+  .populate({path: 'user',select: '-__v'})
 
-  //     // - minus sign in front of the field indicates that we don't want it to be returned.  If we didn't have it, it would mean that it would return only the __v field
-  //     .select('-__v')
-  //     .sort({_id: -1})
+      // - minus sign in front of the field indicates that we don't want it to be returned.  If we didn't have it, it would mean that it would return only the __v field
+      .select('-__v')
+      .sort({_id: -1})
 
     
     

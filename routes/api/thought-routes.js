@@ -9,6 +9,8 @@ const {
   removeReaction
 } = require('../../controllers/thought-controller');
 
+// const { route } = require('./user-routes');
+
 
 router
 .route('/')
