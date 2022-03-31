@@ -6,8 +6,8 @@ const thoughtController = {
  
 getAllThoughts(req,res) {
   Thought.find({})
-  .populate({path: 'user', select: '-__v'})
-        .select('-__v')
+  // .populate({path: 'user', select: '-__v'})
+  //       .select('-__v')
   .then(dbThoughtData=> res.json(dbThoughtData))
   .catch(err => {
     console.log(err);
@@ -17,11 +17,11 @@ getAllThoughts(req,res) {
 
 getThoughtById({ params }, res) {
   Thought.findOne({ _id: params.thoughtId })
-  .populate({path: 'user',select: '-__v'})
+  // .populate({path: 'user',select: '-__v'})
 
-      // - minus sign in front of the field indicates that we don't want it to be returned.  If we didn't have it, it would mean that it would return only the __v field
-      .select('-__v')
-      .sort({_id: -1})
+  //     // - minus sign in front of the field indicates that we don't want it to be returned.  If we didn't have it, it would mean that it would return only the __v field
+  //     .select('-__v')
+  //     .sort({_id: -1})
 
     
     
