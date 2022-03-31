@@ -72,7 +72,7 @@ const userController = {
         _id: params.id,
       },
       {
-        $pull: {
+        $addToSet: {
           friends: params.friendId,
         },
       },
@@ -83,8 +83,8 @@ const userController = {
         runValidators: true
       }
     )
-      // .populate({ path: "friends", select: "-__v" })
-      // .select("-__v")
+      .populate({ path: "friends", select: "-__v" })
+      .select("-__v")
       .then((dbUserData) => {
         if (!dbUserData) {
           res.status(404).json({
