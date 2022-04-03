@@ -6,8 +6,7 @@ const thoughtController = {
  
 getAllThoughts(req,res) {
   Thought.find({})
-  // .populate({path: 'user', select: '-__v'})
-  //       .select('-__v')
+ 
   .then(dbThoughtData=> res.json(dbThoughtData))
   .catch(err => {
     console.log(err);
@@ -17,12 +16,7 @@ getAllThoughts(req,res) {
 
 getThoughtById({ params }, res) {
   Thought.findOne({ _id: params.thoughtId })
-  // .populate({path: 'user',select: '-__v'})
-
-  //     // - minus sign in front of the field indicates that we don't want it to be returned.  If we didn't have it, it would mean that it would return only the __v field
-  //     .select('-__v')
-  //     .sort({_id: -1})
-
+  
     
     
   .then(dbThoughtData => {
@@ -60,8 +54,7 @@ addThought({params, body}, res) {
 
 updateThought({ params, body }, res) {
   Thought.findOneAndUpdate({ _id: params.thoughtId }, body, { new: true, runValidators: true })
-  // .populate({path: 'reactions', select: '-__v'})
-  //       .select('-___v')
+  
     .then(dbThoughtData => {
       if (!dbThoughtData) {
         res.status(404).json({ message: 'No thought found with this id!' });
@@ -101,8 +94,7 @@ updateThought({ params, body }, res) {
           { $push: { reactions: body } },
           { new: true, runValidators: true }
         )
-        // .populate({path: 'reactions', select: '-__v'})
-        // .select('-__v')
+      
           .then(dbThoughtData => {
             if (!dbThoughtData) {
               res.status(404).json({ message: 'No reaction found with this id!' });
@@ -113,7 +105,7 @@ updateThought({ params, body }, res) {
           .catch(err => res.json(err));
       },
     
-  // remove reply
+ 
   removeReaction({ params }, res) {
     Thought.findOneAndUpdate(
     
